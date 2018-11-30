@@ -1,0 +1,10 @@
+main {
+	flex: 1;
+	display: flex;
+	align-items: stretch;
+
+	aside {
+		width: 30%;
+		max-width: 300px;
+	}
+}

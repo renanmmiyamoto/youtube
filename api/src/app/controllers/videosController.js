@@ -20,6 +20,22 @@ var storageVideos = multer.diskStorage({
 
 var uploadVideos = multer({storage: storageVideos});
 
+router.get("/", async (req, res) => {
+	try {
+		const videos = await Video.find();
+
+		videos.filter(video => {
+			if (video.isPublic) {
+				return video;
+			}
+		});
+
+		return res.send({videos});
+	} catch (error) {
+		return res.status(400).send({error: "Error getting video"});
+	}
+});
+
 router.post("/:userId", uploadVideos.single("video"), async (req, res) => {
 	try {
 		const {userId} = req;
