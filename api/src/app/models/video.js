@@ -26,6 +26,9 @@ const VideoSchema = new mongoose.Schema({
 		ref: "User",
 		require: true
 	},
+	thumbnail: {
+		type: String
+	},
 	createdAt: {
 		type: Date,
 		default: Date.now

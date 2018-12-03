@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from "react";
 import Header from "../../components/Header";
-import Sidebar from "../../components/Sidebar";
+import MenuAside from "../../components/MenuAside";
 import VideoItem from "../../components/VideoItem";
 
 import api from "../../services/api";
@@ -8,6 +8,7 @@ import "./style.scss";
 
 class HomePage extends Component {
 	state = {
+		videos: [],
 		errorMessage: ""
 	};
 
@@ -15,7 +16,9 @@ class HomePage extends Component {
 		try {
 			const response = await api.get("/videos/");
 
-			console.log(response);
+			response.data.videos.map(video => (video.user = video.user.name));
+
+			this.setState({videos: response.data.videos});
 		} catch (error) {
 			this.setState({errorMessage: error});
 		}
@@ -30,12 +33,24 @@ class HomePage extends Component {
 			<Fragment>
 				<Header />
 
-				<main>
-					<Sidebar />
+				<main className="home">
+					<MenuAside />
 
-					<section>
-						<VideoItem />
-					</section>
+					<div className="content">
+						<section>
+							{this.state.videos.map(item => {
+								return (
+									<VideoItem
+										key={item._id}
+										id={item._id}
+										image={item.thumbnail}
+										title={item.title}
+										user={item.user}
+									/>
+								);
+							})}
+						</section>
+					</div>
 				</main>
 			</Fragment>
 		);

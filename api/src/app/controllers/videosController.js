@@ -11,10 +11,16 @@ router.use(authMiddleware);
 
 var storageVideos = multer.diskStorage({
 	destination: function(req, file, cb) {
-		cb(null, "/var/www/html/my/api/uploads");
+		cb(null, "/var/www/html/my/youtube/api/src/uploads");
 	},
 	filename: function(req, file, cb) {
-		cb(null, "video-" + Date.now() + path.extname(file.originalname));
+		cb(
+			null,
+			file.originalname.split(".")[0] +
+				"-" +
+				Date.now() +
+				path.extname(file.originalname)
+		);
 	}
 });
 
@@ -22,7 +28,7 @@ var uploadVideos = multer({storage: storageVideos});
 
 router.get("/", async (req, res) => {
 	try {
-		const videos = await Video.find();
+		const videos = await Video.find().populate("user");
 
 		videos.filter(video => {
 			if (video.isPublic) {
@@ -32,32 +38,53 @@ router.get("/", async (req, res) => {
 
 		return res.send({videos});
 	} catch (error) {
+		return res.status(400).send({error: "Error getting videos"});
+	}
+});
+
+router.get("/:id", async (req, res) => {
+	try {
+		const video = await Video.findById(req.params.id).populate("user");
+
+		if (!video.isPublic) {
+			throw error;
+		}
+
+		return res.send({video});
+	} catch (error) {
 		return res.status(400).send({error: "Error getting video"});
 	}
 });
 
-router.post("/:userId", uploadVideos.single("video"), async (req, res) => {
-	try {
-		const {userId} = req;
-		const {title, description, likes, isPublic} = req.body;
-		const {path} = req.file;
+router.post(
+	"/:userId",
+	uploadVideos.fields([
+		{name: "video", maxCount: 1},
+		{name: "thumbnail", maxCount: 1}
+	]),
+	async (req, res) => {
+		try {
+			const {userId} = req;
+			const {title, description, likes, isPublic} = req.body;
 
-		const video = await Video.create({
-			title,
-			description,
-			likes,
-			isPublic: isPublic === "true",
-			user: userId,
-			video: path
-		});
+			const video = await Video.create({
+				title,
+				description,
+				likes,
+				isPublic: isPublic === "true",
+				user: userId,
+				video: req.files.video[0].filename,
+				thumbnail: req.files.thumbnail[0].filename
+			});
 
-		await video.save();
+			await video.save();
 
-		return res.send({video});
-	} catch (err) {
-		return res.status(400).send({error: "Error updating user video"});
+			return res.send({video});
+		} catch (err) {
+			return res.status(400).send({error: "Error updating user video"});
+		}
 	}
-});
+);
 
 router.post("/like/:videoId", async (req, res) => {
 	try {
