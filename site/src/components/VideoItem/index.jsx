@@ -10,8 +10,10 @@ class VideoItem extends Component {
 					src={`http://localhost:3000/${this.props.image}`}
 					alt={this.props.title}
 				/>
-				<h3>{this.props.title}</h3>
-				<span className="autor">{this.props.user}</span>
+				<div>
+					<h3>{this.props.title}</h3>
+					<span className="autor">{this.props.user}</span>
+				</div>
 			</Link>
 		);
 	}

@@ -6,7 +6,7 @@ import "./style.scss";
 class MenuAside extends Component {
 	render() {
 		return (
-			<aside>
+			<aside className="menuAside">
 				<ul>
 					<li className="current">
 						<NavLink to="/" activeClassName="current">

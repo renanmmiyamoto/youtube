@@ -6,7 +6,7 @@ const api = create({
 
 api.addRequestTransform(request => {
 	request.headers.authorization =
-		"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMDU1NjFiNGFhYWI0NDNlYzRjMzBmNCIsImlhdCI6MTU0Mzg1MzYwMSwiZXhwIjoxNTQzOTQwMDAxfQ.XCSVOQCJNzIjKttWDGm7PhU78N93IUx0CII7I51xr_Q";
+		"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMDU1NjFiNGFhYWI0NDNlYzRjMzBmNCIsImlhdCI6MTU0Mzk0MDI1OCwiZXhwIjoxNTQ0MDI2NjU4fQ.CNcyEjaRedi8frL8UcGL2BwY16FCLw3y6zUusKAGXU0";
 });
 
 api.addResponseTransform(response => {

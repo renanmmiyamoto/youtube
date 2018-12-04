@@ -6,6 +6,7 @@ import "./style.scss";
 
 class AsideVideo extends Component {
 	state = {
+		currentVideo: "",
 		videos: [],
 		errorMessage: ""
 	};
@@ -13,32 +14,58 @@ class AsideVideo extends Component {
 	getUserVideos = async () => {
 		try {
 			const response = await api.get("/videos");
+			let videos = [];
 
-			response.data.video.filter(video => {
+			response.data.videos.forEach(video => {
 				if (video.user._id === this.props.user) {
-					return video;
+					if (video._id !== this.state.currentVideo) {
+						videos.push(video);
+					}
 				}
 			});
 
-			console.log(response.data.video);
-
-			// this.setState({video: response.data.video});
+			this.setState({videos});
 		} catch (error) {
 			this.setState({errorMessage: error});
 		}
 	};
 
+	componentWillMount() {
+		this.setState({currentVideo: this.props.currentVideo});
+	}
+
 	componentDidMount() {
 		this.getUserVideos();
 	}
 
+	componentWillReceiveProps(nextProps) {
+		console.log(this.props.currentVideo);
+
+		console.log(nextProps.currentVideo);
+
+		if (this.props.currentVideo !== nextProps.currentVideo) {
+			this.setState({currentVideo: nextProps.currentVideo});
+
+			this.getUserVideos();
+		}
+	}
+
 	render() {
 		return (
-			<aside>
+			<aside className="related">
 				<ul>
-					<li className="current">
-						<VideoItem />
-					</li>
+					{this.state.videos.map(video => {
+						return (
+							<li key={video._id}>
+								<VideoItem
+									id={video._id}
+									image={video.thumbnail}
+									title={video.title}
+									user={video.user.name}
+								/>
+							</li>
+						);
+					})}
 				</ul>
 			</aside>
 		);

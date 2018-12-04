@@ -28,7 +28,9 @@ var uploadVideos = multer({storage: storageVideos});
 
 router.get("/", async (req, res) => {
 	try {
-		const videos = await Video.find().populate("user");
+		const videos = await Video.find()
+			.populate("user")
+			.sort("-createdAt");
 
 		videos.filter(video => {
 			if (video.isPublic) {
