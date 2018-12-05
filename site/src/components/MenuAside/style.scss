@@ -1,5 +1,5 @@
 aside.menuAside {
-	background: #373f48;
+	background: #282b3d;
 	position: relative;
 	padding: 10px 0;
 
@@ -33,16 +33,16 @@ aside.menuAside {
 
 			a.current {
 				background: #eef2f9;
-				color: #373f48;
+				color: #282b3d;
 				box-shadow: 0 2px 15px 0px rgba(0, 0, 0, 0.2);
 
 				svg {
-					fill: #dc4b3b;
+					fill: #e55a57;
 				}
 
 				&::before {
 					content: "";
-					background: #dc4b3b;
+					background: #e55a57;
 					position: absolute;
 					top: 7px;
 					left: 4px;
