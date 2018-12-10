@@ -1,15 +1,25 @@
 import api from "../../services/api";
 
-const do_login = async user => {
+const do_login = async newUser => {
 	try {
 		const response = await api.post("/auth/authenticate", {
-			email: user.email,
-			password: user.password
+			email: newUser.email,
+			password: newUser.password
 		});
 
-		console.log(response);
-	} catch (error) {
-		return error.data;
+		const {token, user} = response.data;
+
+		localStorage.setItem("@YOUTUBE:token", token);
+		localStorage.setItem("@YOUTUBE:user", JSON.stringify(user));
+
+		return {
+			ok: true
+		};
+	} catch (response) {
+		return {
+			ok: false,
+			errorMessage: response.data.error
+		};
 	}
 };
 

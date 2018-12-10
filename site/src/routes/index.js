@@ -1,7 +1,21 @@
 import React from "react";
-import {BrowserRouter, Switch, Route} from "react-router-dom";
+import {BrowserRouter, Switch, Route, Redirect} from "react-router-dom";
+import {isAuthenticated} from "../services/auth";
 
-import {publicRoutes} from "./routes";
+import {publicRoutes, privateRoutes} from "./routes";
+
+const PrivateRoute = ({component: Component, ...rest}) => (
+	<Route
+		{...rest}
+		render={props =>
+			isAuthenticated() ? (
+				<Component {...props} />
+			) : (
+				<Redirect to={{pathname: "/", state: {from: props.location}}} />
+			)
+		}
+	/>
+);
 
 const Router = () => (
 	<BrowserRouter>
@@ -9,6 +23,17 @@ const Router = () => (
 			{publicRoutes.map((route, i) => {
 				return (
 					<Route
+						exact
+						path={route.path}
+						component={route.component}
+						key={i}
+					/>
+				);
+			})}
+
+			{privateRoutes.map((route, i) => {
+				return (
+					<PrivateRoute
 						exact
 						path={route.path}
 						component={route.component}

@@ -6,6 +6,13 @@ const publicRoutes = [
 	{
 		path: "/",
 		component: LoginPage
+	}
+];
+
+const privateRoutes = [
+	{
+		path: "/home",
+		component: HomePage
 	},
 	{
 		path: "/dashboard",
@@ -17,4 +24,4 @@ const publicRoutes = [
 	}
 ];
 
-export {publicRoutes};
+export {publicRoutes, privateRoutes};
