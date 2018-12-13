@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const authMiddleware = require("../middlewares/auth");
 
+const User = require("../models/user");
 const Video = require("../models/video");
 
 const router = express.Router();
@@ -48,9 +49,18 @@ router.get("/:id", async (req, res) => {
 	try {
 		const video = await Video.findById(req.params.id).populate("user");
 
-		if (!video.isPublic) {
-			throw error;
+		const user = await User.findById(video.user._id).select("+password");
+
+		// If the user already liked the video, we're remove the like;
+		if (user.watchedVideos.indexOf(video.user._id) === -1) {
+			user.watchedVideos.push(video.user._id);
+			video.set({views: video.views + 1});
+
+			await user.save();
+			await video.save();
 		}
+
+		console.log(user);
 
 		return res.send({video});
 	} catch (error) {
@@ -66,19 +76,23 @@ router.post(
 	]),
 	async (req, res) => {
 		try {
-			const {userId} = req;
-			const {title, description, likes, isPublic} = req.body;
+			const {userId} = req.params;
+			const {title, description, likes} = req.body;
+
+			const user = await User.findById(userId).select("+password");
 
 			const video = await Video.create({
 				title,
 				description,
 				likes,
-				isPublic: isPublic === "true",
 				user: userId,
 				video: req.files.video[0].filename,
 				thumbnail: req.files.thumbnail[0].filename
 			});
 
+			user.videos.push(video._id);
+
+			await user.save();
 			await video.save();
 
 			return res.send({video});
@@ -88,13 +102,32 @@ router.post(
 	}
 );
 
-router.post("/like/:videoId", async (req, res) => {
+router.post("/like/:videoId/:userId", async (req, res) => {
 	try {
 		const video = await Video.findById(req.params.videoId);
 
+		const user = await User.findById(req.params.userId).select("+password");
+
+		// If the user already liked the video, we're remove the like;
+		if (user.likedVideos.indexOf(req.params.videoId) !== -1) {
+			user.likedVideos.splice(
+				user.likedVideos.indexOf(req.params.videoId),
+				1
+			);
+
+			video.set({likes: video.likes - 1});
+
+			await video.save();
+			await user.save();
+
+			return res.send(video);
+		}
+
 		video.set({likes: video.likes + 1});
+		user.likedVideos.push(req.params.videoId);
 
 		await video.save();
+		await user.save();
 
 		return res.send(video);
 	} catch (error) {

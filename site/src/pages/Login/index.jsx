@@ -89,6 +89,7 @@ class LoginPage extends Component {
 							<input
 								type="password"
 								placeholder="Password"
+								autoComplete="new-password"
 								value={this.state.user.password}
 								onChange={e =>
 									this.setState({

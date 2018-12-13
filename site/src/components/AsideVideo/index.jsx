@@ -39,10 +39,6 @@ class AsideVideo extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		console.log(this.props.currentVideo);
-
-		console.log(nextProps.currentVideo);
-
 		if (this.props.currentVideo !== nextProps.currentVideo) {
 			this.setState({currentVideo: nextProps.currentVideo});
 

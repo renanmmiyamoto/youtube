@@ -2,9 +2,9 @@ import React, {Component, Fragment} from "react";
 import Header from "../../components/Header";
 import MenuAside from "../../components/MenuAside";
 import AsideVideo from "../../components/AsideVideo";
-import VideoItem from "../../components/VideoItem";
 
 import api from "../../services/api";
+import {like} from "../../images";
 import "./style.scss";
 
 class VideoPage extends Component {
@@ -40,13 +40,28 @@ class VideoPage extends Component {
 		}
 	}
 
+	like = async () => {
+		try {
+			const response = await api.post(
+				"/videos/like/" +
+					this.state.video._id +
+					"/" +
+					JSON.parse(localStorage.getItem("@YOUTUBE:user"))._id
+			);
+
+			this.setState({video: response.data});
+		} catch (error) {
+			this.setState({errorMessage: error});
+		}
+	};
+
 	render() {
 		if (this.state.video.user !== undefined) {
 			return (
 				<Fragment>
 					<Header />
 
-					<main className="home">
+					<main className="video">
 						<MenuAside />
 
 						<div className="content">
@@ -66,8 +81,38 @@ class VideoPage extends Component {
 									</video>
 								</div>
 
-								<h3>{this.state.video.title}</h3>
-								<h3>{this.state.video.video}</h3>
+								<div className="info">
+									<div className="top">
+										<h3>{this.state.video.title}</h3>
+
+										<button className="follow">
+											Subscribe &nbsp;
+											{this.state.video.user.followers}
+										</button>
+									</div>
+
+									<div className="bottom">
+										<div className="user">
+											<img
+												src={`http://localhost:3000/${
+													this.state.video.user.avatar
+												}`}
+												alt="Avatar User"
+											/>
+											<h4>
+												{this.state.video.user.name}
+											</h4>
+										</div>
+
+										<button
+											className="like"
+											onClick={this.like}
+										>
+											<img src={like} alt="Like video" />
+											{this.state.video.likes}
+										</button>
+									</div>
+								</div>
 							</section>
 
 							<AsideVideo

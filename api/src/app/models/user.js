@@ -17,6 +17,13 @@ const UserSchema = new mongoose.Schema({
 		required: true,
 		select: false
 	},
+	avatar: {
+		type: String
+	},
+	bornDate: {
+		type: Date,
+		required: true
+	},
 	videos: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
@@ -33,6 +40,18 @@ const UserSchema = new mongoose.Schema({
 		type: Number,
 		default: 0
 	},
+	likedVideos: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Video"
+		}
+	],
+	watchedVideos: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Video"
+		}
+	],
 	passwordResetToken: {
 		type: String,
 		select: false
