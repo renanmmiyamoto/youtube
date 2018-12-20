@@ -1,7 +1,5 @@
 import React, {Component, Fragment} from "react";
-import Header from "../../components/Header";
-import MenuAside from "../../components/MenuAside";
-import VideoItem from "../../components/VideoItem";
+import {Header, MenuAside, VideoItem} from "../../components";
 
 import api from "../../services/api";
 import "./style.scss";

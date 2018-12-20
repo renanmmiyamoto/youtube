@@ -40,13 +40,23 @@
 						color: #414452;
 					}
 
+					.right {
+						.views {
+							display: block;
+							font-size: 15px;
+							color: #414452;
+							text-align: right;
+							margin: 0 0 10px;
+						}
+					}
+
 					.follow {
-						background: #e03936;
+						background: #e55a57;
 						font-size: 15px;
 						color: #fff;
 						font-weight: 900;
 						text-transform: uppercase;
-						padding: 10px 15px;
+						padding: 8px 15px;
 						margin: 0 0 0 20px;
 						white-space: nowrap;
 						border-radius: 5px;

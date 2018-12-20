@@ -17,7 +17,14 @@ class Header extends Component {
 
 				<nav>
 					<Link to="/">Home</Link>
-					<Link to="/">My channel</Link>
+					<Link
+						to={`/channel/${
+							JSON.parse(localStorage.getItem("@YOUTUBE:user"))
+								._id
+						}`}
+					>
+						My channel
+					</Link>
 					<Link to="/">Popular</Link>
 				</nav>
 

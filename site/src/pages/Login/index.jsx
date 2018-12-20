@@ -33,7 +33,7 @@ class LoginPage extends Component {
 		}
 
 		if (password.length < 3) {
-			this.setState({errorMessage: "Senha inválido"});
+			this.setState({errorMessage: "Senha inválida"});
 			return;
 		}
 
@@ -64,7 +64,7 @@ class LoginPage extends Component {
 				</section>
 
 				<section className="right">
-					<form>
+					<form encType="multipart/form-data">
 						<h2>Login to your account</h2>
 
 						<label>

@@ -1,7 +1,5 @@
 import React, {Component, Fragment} from "react";
-import Header from "../../components/Header";
-import MenuAside from "../../components/MenuAside";
-import AsideVideo from "../../components/AsideVideo";
+import {Header, MenuAside, AsideVideo} from "../../components";
 
 import api from "../../services/api";
 import {like} from "../../images";
@@ -55,6 +53,27 @@ class VideoPage extends Component {
 		}
 	};
 
+	subscribe = async () => {
+		try {
+			const response = await api.post(
+				`/auth/follow/${this.state.video.user._id}`,
+				{id: JSON.parse(localStorage.getItem("@YOUTUBE:user"))._id}
+			);
+
+			this.setState({
+				video: {
+					...this.state.video,
+					user: {
+						...this.state.video.user,
+						followers: response.data.followers
+					}
+				}
+			});
+		} catch (error) {
+			this.setState({errorMessage: error});
+		}
+	};
+
 	render() {
 		if (this.state.video.user !== undefined) {
 			return (
@@ -83,12 +102,30 @@ class VideoPage extends Component {
 
 								<div className="info">
 									<div className="top">
-										<h3>{this.state.video.title}</h3>
+										<div className="left">
+											<span className="date">
+												{this.state.video.createdAt}
+											</span>
 
-										<button className="follow">
-											Subscribe &nbsp;
-											{this.state.video.user.followers}
-										</button>
+											<h3>{this.state.video.title}</h3>
+										</div>
+
+										<div className="right">
+											<span className="views">
+												{this.state.video.views} views
+											</span>
+
+											<button
+												className="follow"
+												onClick={this.subscribe}
+											>
+												Subscribe &nbsp;
+												{
+													this.state.video.user
+														.followers
+												}
+											</button>
+										</div>
 									</div>
 
 									<div className="bottom">

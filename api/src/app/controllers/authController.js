@@ -83,6 +83,9 @@ router.post("/follow/:userId", async (req, res) => {
 	);
 	const userFollowing = await User.findById(req.body.id).select("+password");
 
+	/* userFollowing.set({following: []});
+	userFollower.set({followers: 0}); */
+
 	// If the user already follow the channel, we're remove the following list;
 	if (userFollowing.following.indexOf(req.params.userId) !== -1) {
 		userFollowing.following.splice(
@@ -95,7 +98,7 @@ router.post("/follow/:userId", async (req, res) => {
 		await userFollowing.save();
 		await userFollower.save();
 
-		return res.send(userFollowing);
+		return res.send(userFollower);
 	}
 
 	userFollower.set({followers: userFollower.followers + 1});
@@ -105,7 +108,7 @@ router.post("/follow/:userId", async (req, res) => {
 	await userFollowing.save();
 	await userFollower.save();
 
-	return res.send(userFollowing);
+	return res.send(userFollower);
 });
 
 router.post("/forgot_password", async (req, res) => {
@@ -131,7 +134,7 @@ router.post("/forgot_password", async (req, res) => {
 		mailer.sendMail(
 			{
 				to: email,
-				from: "diego@rocketseat.com.br",
+				from: "renanmmiyamoto@gmail.com",
 				template: "auth/forgot_password",
 				context: {token}
 			},

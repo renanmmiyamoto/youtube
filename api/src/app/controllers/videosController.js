@@ -33,13 +33,43 @@ router.get("/", async (req, res) => {
 			.populate("user")
 			.sort("-createdAt");
 
-		videos.filter(video => {
-			if (video.isPublic) {
-				return video;
-			}
-		});
-
 		return res.send({videos});
+	} catch (error) {
+		return res.status(400).send({error: "Error getting videos"});
+	}
+});
+
+router.get("/user/:userId", async (req, res) => {
+	try {
+		const videos = await User.findById(req.params.userId)
+			.populate("videos")
+			.sort("-createdAt");
+
+		return res.send(videos);
+	} catch (error) {
+		return res.status(400).send({error: "Error getting videos"});
+	}
+});
+
+router.get("/liked/:userId", async (req, res) => {
+	try {
+		const videos = await User.findById(req.params.userId)
+			.populate("likedVideos")
+			.sort("-createdAt");
+
+		return res.send(videos);
+	} catch (error) {
+		return res.status(400).send({error: "Error getting videos"});
+	}
+});
+
+router.get("/watched/:userId", async (req, res) => {
+	try {
+		const videos = await User.findById(req.params.userId)
+			.populate("watchedVideos")
+			.sort("-createdAt");
+
+		return res.send(videos);
 	} catch (error) {
 		return res.status(400).send({error: "Error getting videos"});
 	}
@@ -59,8 +89,6 @@ router.get("/:id", async (req, res) => {
 			await user.save();
 			await video.save();
 		}
-
-		console.log(user);
 
 		return res.send({video});
 	} catch (error) {
@@ -104,7 +132,7 @@ router.post(
 
 router.post("/like/:videoId/:userId", async (req, res) => {
 	try {
-		const video = await Video.findById(req.params.videoId);
+		const video = await Video.findById(req.params.videoId).populate("user");
 
 		const user = await User.findById(req.params.userId).select("+password");
 
