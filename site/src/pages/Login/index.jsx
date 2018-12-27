@@ -114,6 +114,8 @@ class LoginPage extends Component {
 							</button>
 
 							<Link to="/forgot_password">Forgot Password?</Link>
+
+							<Link to="/register">New user?</Link>
 						</div>
 					</form>
 				</section>

@@ -11,9 +11,8 @@ class UploadPage extends Component {
 		newVideo: {
 			title: "",
 			description: "",
-			likes: 0,
-			video: "",
-			thumbnail: ""
+			video: {},
+			thumbnail: {}
 		},
 		errorMessage: ""
 	};
@@ -25,6 +24,17 @@ class UploadPage extends Component {
 			e.target.style.height =
 				39 + 19 * (e.target.value.split("\n").length - 1) + "px";
 		}
+	};
+
+	handleFileState = e => {
+		const file = e.target.files[0];
+
+		this.setState({
+			newVideo: {
+				...this.state.newVideo,
+				[e.target.id]: file
+			}
+		});
 	};
 
 	uploadVideo = async e => {
@@ -42,19 +52,22 @@ class UploadPage extends Component {
 			return;
 		}
 
-		const upload = await do_upload(this.state.newVideo);
+		const upload = await do_upload(
+			JSON.parse(localStorage.getItem("@YOUTUBE:user"))._id,
+			this.state.newVideo
+		);
 
 		if (!upload.ok) {
 			this.setState({errorMessage: upload.errorMessage});
 			return;
 		} else {
 			this.setState({errorMessage: ""});
-			return (
-				<Redirect
-					to={`/channel/${
-						JSON.parse(localStorage.getItem("@YOUTUBE:user"))._id
-					}`}
-				/>
+			console.log("foisss");
+
+			return this.props.history.push(
+				`/channel/${
+					JSON.parse(localStorage.getItem("@YOUTUBE:user"))._id
+				}`
 			);
 		}
 	};
@@ -112,22 +125,15 @@ class UploadPage extends Component {
 								<input
 									type="file"
 									id="video"
-									value={this.state.newVideo.video}
-									onChange={e =>
-										this.setState({
-											newVideo: {
-												...this.state.newVideo,
-												video: e.target.value
-											}
-										})
-									}
+									value={this.state.newVideo.video.name && ""}
+									onChange={this.handleFileState.bind(this)}
 								/>
 								<label htmlFor="video">
 									<img src={video} alt="File of video" />
 									<span>
-										{this.state.newVideo.video === ""
+										{this.state.newVideo.video.length === 0
 											? "File of video"
-											: this.state.newVideo.video}
+											: this.state.newVideo.video.name}
 									</span>
 								</label>
 							</div>
@@ -136,25 +142,28 @@ class UploadPage extends Component {
 								<input
 									type="file"
 									id="thumbnail"
-									value={this.state.newVideo.thumbnail}
-									onChange={e =>
-										this.setState({
-											newVideo: {
-												...this.state.newVideo,
-												thumbnail: e.target.value
-											}
-										})
+									value={
+										this.state.newVideo.thumbnail.name && ""
 									}
+									onChange={this.handleFileState.bind(this)}
 								/>
 								<label htmlFor="thumbnail">
 									<img src={image} alt="Thumbnail of video" />
 									<span>
-										{this.state.newVideo.thumbnail === ""
+										{this.state.newVideo.thumbnail
+											.length === 0
 											? "Thumbnail of video"
-											: this.state.newVideo.thumbnail}
+											: this.state.newVideo.thumbnail
+													.name}
 									</span>
 								</label>
 							</div>
+
+							{this.state.errorMessage && (
+								<p className="errorMessage">
+									{this.state.errorMessage}
+								</p>
+							)}
 
 							<button onClick={e => this.uploadVideo(e)}>
 								Upload video

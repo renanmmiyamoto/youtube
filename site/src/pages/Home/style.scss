@@ -8,8 +8,12 @@
 			padding: 20px 40px;
 
 			.item-video {
-				width: 23%;
-				margin: 15px 2.6% 0 0;
+				width: 16%;
+				margin: 15px 0.8% 0 0;
+
+				&:nth-child(6) {
+					margin-right: 0;
+				}
 
 				img {
 					display: block;
