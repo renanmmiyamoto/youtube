@@ -17,15 +17,6 @@ class UploadPage extends Component {
 		errorMessage: ""
 	};
 
-	changeTextarea = e => {
-		if (e.keyCode === 13) {
-			e.target.style.height = e.target.clientHeight + 19 + "px";
-		} else {
-			e.target.style.height =
-				39 + 19 * (e.target.value.split("\n").length - 1) + "px";
-		}
-	};
-
 	handleFileState = e => {
 		const file = e.target.files[0];
 
@@ -117,7 +108,6 @@ class UploadPage extends Component {
 											}
 										})
 									}
-									onKeyDown={e => this.changeTextarea(e)}
 								/>
 							</label>
 

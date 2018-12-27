@@ -53,6 +53,9 @@
 			}
 
 			textarea {
+				height: auto;
+				min-height: 39px;
+				max-height: 134px;
 				resize: none;
 			}
 		}
