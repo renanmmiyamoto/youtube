@@ -8,12 +8,41 @@ class MenuAside extends Component {
 		return (
 			<aside className="menuAside">
 				<ul>
-					<li className="current">
+					<li>
 						<NavLink to="/" activeClassName="current">
 							<FaHome />
 							Home
 						</NavLink>
 					</li>
+					<li>
+						<NavLink to="/subscriptions" activeClassName="current">
+							<FaHome />
+							Subscriptions
+						</NavLink>
+					</li>
+
+					<hr />
+
+					<li>
+						<NavLink to="/history" activeClassName="current">
+							<FaHome />
+							History
+						</NavLink>
+					</li>
+					<li>
+						<NavLink to="/watch_later" activeClassName="current">
+							<FaHome />
+							Watch Later
+						</NavLink>
+					</li>
+					<li>
+						<NavLink to="/liked_videos" activeClassName="current">
+							<FaHome />
+							Liked Videos
+						</NavLink>
+					</li>
+
+					<hr />
 				</ul>
 			</aside>
 		);
