@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "apisauce": "^1.0.0",
-    "node-sass": "^4.10.0",
+    "node-sass": "^4.13.1",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-icons": "^3.2.2",
